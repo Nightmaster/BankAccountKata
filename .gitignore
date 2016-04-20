@@ -5,6 +5,7 @@
 
 # IDE stuff:
 .idea/*
+*.iml
 
 ## File-based project format:
 *.iws
