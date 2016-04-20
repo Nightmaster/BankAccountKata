@@ -12,6 +12,10 @@ public class Operation {
 	private final BigDecimal previousAmount, newAmount;
 
 	public Operation(final OperationType operationType, final BigDecimal previousAmount, final BigDecimal newAmount) {
+		if (null == operationType || null == newAmount || null == previousAmount)
+			throw new IllegalArgumentException("Error, at least one argument is empty or null. Please check data!");
+		else if (0 == newAmount.compareTo(previousAmount))
+			throw new IllegalArgumentException("Error, the two amounts are the same, this is not allowed!");
 		this.operationType = operationType;
 		this.previousAmount = previousAmount;
 		this.newAmount = newAmount;
