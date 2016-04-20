@@ -3,17 +3,16 @@ package fr.sgcib.test;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
-
-import static org.apache.commons.lang3.StringUtils.isBlank;
+import fr.sgcib.test.constants.OperationType;
 
 public class Operation {
-	private final String label;
+	private final OperationType operationType;
 	private final LocalDate date;
 	private final LocalTime hour;
 	private final BigDecimal previousAmount, newAmount;
 
-	public Operation(final String label, final BigDecimal previousAmount, final BigDecimal newAmount) {
-		this.label = label;
+	public Operation(final OperationType operationType, final BigDecimal previousAmount, final BigDecimal newAmount) {
+		this.operationType = operationType;
 		this.previousAmount = previousAmount;
 		this.newAmount = newAmount;
 		this.date = LocalDate.now();
@@ -28,8 +27,8 @@ public class Operation {
 		return this.hour;
 	}
 
-	public String getLabel() {
-		return this.label;
+	public OperationType getOperationType() {
+		return this.operationType;
 	}
 
 	public BigDecimal getNewAmount() {

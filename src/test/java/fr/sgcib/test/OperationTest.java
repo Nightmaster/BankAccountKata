@@ -5,21 +5,23 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
 
+import fr.sgcib.test.constants.OperationType;
+
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static fr.sgcib.test.constants.OperationType.INITIALIZATION;
 
 public class OperationTest {
 	@Test
 	public void throwIAEOnIncorrectInitialization() {
 		final List<Exception> exceptions = new ArrayList<>();
-		final String emptyLabel = "",
-			label = "label";
+		final OperationType operationType= INITIALIZATION;
 		final BigDecimal zero = BigDecimal.ZERO,
 			one = BigDecimal.ONE;
 
-		System.out.println("Try incorrect label");
+		System.out.println("Try incorrect operationType");
 		try {
-			new Operation(emptyLabel, zero, one);
+			new Operation(null, zero, one);
 		}
 		catch (final Exception iae) {
 			assertNotNull(iae);
@@ -28,7 +30,7 @@ public class OperationTest {
 
 		System.out.println("Try incorrect previousAmount");
 		try {
-			new Operation(label, null, one);
+			new Operation(operationType, null, one);
 		}
 		catch (final Exception iae) {
 			assertNotNull(iae);
@@ -37,7 +39,7 @@ public class OperationTest {
 
 		System.out.println("Try incorrect newAmount");
 		try {
-			new Operation(label, zero, null);
+			new Operation(operationType, zero, null);
 		}
 		catch (final Exception iae) {
 			assertNotNull(iae);
@@ -46,7 +48,7 @@ public class OperationTest {
 
 		System.out.println("Try with all incorrect parameters");
 		try {
-			new Operation(emptyLabel, null, null);
+			new Operation(null, null, null);
 		}
 		catch (final Exception iae) {
 			assertNotNull(iae);

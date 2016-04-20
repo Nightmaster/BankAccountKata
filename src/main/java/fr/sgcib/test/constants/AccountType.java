@@ -1,4 +1,4 @@
-package fr.sgcib.test;
+package fr.sgcib.test.constants;
 
 public enum AccountType {
 	CHECKING_ACCOUNT,
