@@ -1,5 +1,6 @@
 package fr.sgcib.test;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
@@ -51,8 +52,16 @@ public class AccountTest {
 			addAndCheck(throwables, th);
 		}
 
+		System.out.println(testCase  + "Try an negative amount");
+		try {
+			new Account(0, CHECKING_ACCOUNT, new BigDecimal(-1L), overdraftAllowed);
+		}
+		catch (final Throwable th) {
+			addAndCheck(throwables, th);
+		}
+
 		System.out.println("Check list length");
-		assertTrue("There only " + throwables.size() + " that has been thrown, on 4 expected!", 3 == throwables.size());
+		assertTrue("There only " + throwables.size() + " that has been thrown, on 4 expected!", 4 == throwables.size());
 
 		System.out.println("Check exceptions are not null");
 		throwables.forEach(exc -> assertNotNull("Exception " + throwables.indexOf(exc) + " is null!", exc));
