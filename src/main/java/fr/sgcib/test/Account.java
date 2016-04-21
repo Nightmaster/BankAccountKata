@@ -64,8 +64,10 @@ public class Account {
 		return this.amount;
 	}
 
-	public void setAmount(final BigDecimal amount) {
-		this.amount = amount;
+	public void addOrRemoveMoney(final BigDecimal amount) {
+		if (null == amount || 0 == BigDecimal.ZERO.compareTo(amount))
+			return;
+		this.amount = this.amount.add(amount);
 	}
 
 	@Override
