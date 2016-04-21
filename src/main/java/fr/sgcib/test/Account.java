@@ -19,6 +19,8 @@ public class Account {
 	public Account(final long id, final AccountType accountType, final BigDecimal amount, final long overdraftAllowed) {
 		if (null == accountType ||null == amount)
 			throw new IllegalArgumentException("The accountType or the amount is null! Please check the data");
+		else if (1 == BigDecimal.ZERO.compareTo(amount))
+			throw new IllegalArgumentException("The amount can not be a negative amount on Account creation");
 		this.id = id;
 		this.accountType = accountType;
 		this.amount = amount;
