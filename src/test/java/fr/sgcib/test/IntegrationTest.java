@@ -8,6 +8,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
 import static fr.sgcib.test.constants.AccountType.SAVING_ACCOUNT;
+import static fr.sgcib.test.constants.LogHelper.LF;
+import static fr.sgcib.test.constants.LogHelper.OK;
+import static fr.sgcib.test.constants.LogHelper.SEPARATOR;
 
 public class IntegrationTest {
 	private final Bank bank = Bank.getInstance();
@@ -26,13 +29,16 @@ public class IntegrationTest {
 
 	@Test
 	public void clientWantsToSaveMoneyUSTest() {
+		final String testCase = "clientWantsToSaveMoneyUSTest() - ";
 		final int amount = 50000;
 		final BigDecimal realAmount;
 		final Account savingAccount;
 
+		System.out.println(LF + SEPARATOR + testCase + "Check we can create a new account and add money on it");
 		savingAccount = addMoneyOnNewSavingAccount(amount, this.bank.getClients().get(25L));
 		realAmount = savingAccount.getAmount();
-		assertTrue("Amount missmatch: expected " + amount + " but found: " + realAmount.toPlainString(), 0 == new BigDecimal(amount).compareTo(realAmount));
+		assertTrue(testCase + "Amount missmatch: expected " + amount + " but found: " + realAmount.toPlainString(), 0 == new BigDecimal(amount).compareTo(realAmount));
+		System.out.println(testCase + OK + LF + SEPARATOR);
 	}
 
 	@Test
