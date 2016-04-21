@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.Objects;
 import fr.sgcib.test.constants.AccountType;
 
+import static fr.sgcib.test.constants.OperationType.CREDIT;
 import static fr.sgcib.test.constants.OperationType.INITIALIZATION;
+import static fr.sgcib.test.constants.OperationType.WITHDRAWAL;
+import static fr.sgcib.test.utils.Utilitarians.isNegative;
 
 public class Account {
 	private final long id;
@@ -24,10 +27,7 @@ public class Account {
 		this.id = id;
 		this.accountType = accountType;
 		this.amount = amount;
-		if (0 > overdraftAllowed)
-			this.overdraftAllowed = -overdraftAllowed;
-		else
-			this.overdraftAllowed = overdraftAllowed;
+			this.overdraftAllowed = 0 > overdraftAllowed ? -overdraftAllowed : overdraftAllowed;
 		this.overdraft = false;
 		this.operations.add(new Operation(INITIALIZATION, BigDecimal.ZERO, amount));
 	}
@@ -65,9 +65,14 @@ public class Account {
 	}
 
 	public void addOrRemoveMoney(final BigDecimal amount) {
+		final BigDecimal newAmount;
 		if (null == amount || 0 == BigDecimal.ZERO.compareTo(amount))
 			return;
-		this.amount = this.amount.add(amount);
+
+		newAmount = this.amount.add(amount);
+		this.operations.add(new Operation(isNegative(amount) ? WITHDRAWAL : CREDIT, this.amount, newAmount));
+
+		this.amount = newAmount;
 	}
 
 	@Override
