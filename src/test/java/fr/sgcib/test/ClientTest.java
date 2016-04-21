@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 import org.junit.Test;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -20,7 +21,10 @@ public class ClientTest {
 		SPACE = " ",
 		FAMILY_NAME = "Test",
 		EMAIL_ADDRESS = "alice@test.fr",
-		PHYSICAL_ADDRESS = "Cul-de-sac, The Shire";
+		EMAIL_ADDRESS_CHANGED = "Email address is not the same after set",
+		PHYSICAL_ADDRESS = "Cul-de-sac, The Shire",
+		PHYSICAL_ADDRESS_CHANGED = "Physical address is not the same after set",
+		ACCOUNTS_CHANGED = "Accounts are not the same after set or add";
 	private static final String[] NAMES = new String[] {"Alice", "Wonderland"};
 
 	private final static Set<Account> ACCOUNTS = new HashSet<>();
@@ -51,7 +55,7 @@ public class ClientTest {
 		throwables.forEach(exc -> assertNotNull("Exception " + throwables.indexOf(exc) + " is null!", exc));
 
 		System.out.println("Check type of catch exceptions");
-		throwables.forEach(exc -> assertTrue("Exception " + throwables.indexOf(exc) + " is not an IllegalArgumentException!", exc instanceof  IllegalArgumentException));
+		throwables.forEach(exc -> assertTrue("Exception " + throwables.indexOf(exc) + " is not an IllegalArgumentException!", exc instanceof IllegalArgumentException));
 		System.out.println(testCase + OK + LF + SEPARATOR);
 	}
 
@@ -101,9 +105,43 @@ public class ClientTest {
 		System.out.println(testCase + "Check on constructor is OK!\nNow let's check on setters");
 		client = new Client(--it, false, FAMILY_NAME, NAMES, EMAIL_ADDRESS, PHYSICAL_ADDRESS, ACCOUNTS);
 		client.setEmailAddress(SPACE + EMAIL_ADDRESS + TAB);
-		assertEquals("Email address is not the same after set", EMAIL_ADDRESS, client.getEmailAddress());
+		assertEquals(EMAIL_ADDRESS_CHANGED, EMAIL_ADDRESS, client.getEmailAddress());
 		client.setPhysicalAddress(SPACE + PHYSICAL_ADDRESS + TAB);
-		assertEquals("Email address is not the same after set", PHYSICAL_ADDRESS, client.getPhysicalAddress());
+		assertEquals(PHYSICAL_ADDRESS_CHANGED, PHYSICAL_ADDRESS, client.getPhysicalAddress());
+		System.out.println(testCase + OK + LF + SEPARATOR);
+	}
+
+	@Test
+	public void settersDoNotChangeDataOnNullOrBlankButChangeOnCorrectTest() {
+		final String testCase = "settersDoNotChangeDataOnNullOrBlankButChangeOnCorrectTest() - ";
+		final Client client = new Client(-10, false, FAMILY_NAME, NAMES, EMAIL_ADDRESS, PHYSICAL_ADDRESS, ACCOUNTS);
+		final Set<Account> accounts = new HashSet<>();
+
+		System.out.println(LF + SEPARATOR + testCase + "Check physical address setter set only on correct data");
+		client.setPhysicalAddress("  \t     ");
+		assertEquals(PHYSICAL_ADDRESS_CHANGED, PHYSICAL_ADDRESS, client.getPhysicalAddress());
+		client.setPhysicalAddress(null);
+		assertEquals(PHYSICAL_ADDRESS_CHANGED, PHYSICAL_ADDRESS, client.getPhysicalAddress());
+		client.setPhysicalAddress("   a    ");
+		assertEquals(PHYSICAL_ADDRESS_CHANGED, "a", client.getPhysicalAddress());
+		System.out.println(testCase + "Check on physical address setter OK");
+
+		System.out.println(testCase + "Check email address setter set only on correct data");
+		client.setEmailAddress("      \t ");
+		assertEquals(EMAIL_ADDRESS_CHANGED, EMAIL_ADDRESS, client.getEmailAddress());
+		client.setEmailAddress(null);
+		assertEquals(EMAIL_ADDRESS_CHANGED, EMAIL_ADDRESS, client.getEmailAddress());
+		client.setEmailAddress(" \t  wonderland@alice.fr \t   ");
+		assertEquals(EMAIL_ADDRESS_CHANGED, "wonderland@alice.fr", client.getEmailAddress());
+		System.out.println(testCase + "Check on email address setter OK");
+
+		System.out.println(testCase + "Check accounts setter and add change data only on correct received data");
+		client.setAccounts(null);
+		assertArrayEquals(ACCOUNTS_CHANGED, ACCOUNTS.toArray(), client.getAccounts().toArray());
+		client.setAccounts(accounts);
+		assertArrayEquals(ACCOUNTS_CHANGED, ACCOUNTS.toArray(), client.getAccounts().toArray());
+		client.addAccount(null);
+		assertArrayEquals(ACCOUNTS_CHANGED, ACCOUNTS.toArray(), client.getAccounts().toArray());
 		System.out.println(testCase + OK + LF + SEPARATOR);
 	}
 }
