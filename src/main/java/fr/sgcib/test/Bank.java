@@ -1,8 +1,14 @@
 package fr.sgcib.test;
 
+import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.TreeMap;
+import fr.sgcib.test.constants.AccountType;
+
+import static fr.sgcib.test.constants.AccountType.CHECKING_ACCOUNT;
 
 public class Bank {
 	private static final Bank INSTANCE = new Bank();
@@ -16,6 +22,24 @@ public class Bank {
 
 	public static Bank getInstance(){
 		return INSTANCE;
+	}
+
+	public synchronized void createClient(final boolean isMale, final String familyName, final String[] names, final String emailAddress, final String physicalAddress, final BigDecimal amount, final long overdraftAllowed) {
+		final Set<Account> accounts = new HashSet<>(1);
+		final Client client;
+
+		accounts.add(createAccount(CHECKING_ACCOUNT, amount, overdraftAllowed));
+		client = new Client(clientCount, isMale, familyName, names, emailAddress, physicalAddress, accounts);
+		clientCount++;
+	}
+
+	private synchronized Account createAccount(final AccountType accountType, final BigDecimal amount, final long overdraftAllowed) {
+		final Account checkingAccount;
+
+		checkingAccount = new Account(accountCount, accountType, amount, overdraftAllowed);
+		accountCount++;
+
+		return checkingAccount;
 	}
 
 	public Map<Long, Client> getClients() {
