@@ -1,9 +1,15 @@
 package fr.sgcib.test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+
+import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static fr.sgcib.test.utils.Uilitarians.checkListElements;
+import static fr.sgcib.test.utils.Uilitarians.checkSetElements;
 
 public class Client {
 	private final long id;
@@ -16,13 +22,27 @@ public class Client {
 	private Set<Account> accounts;
 
 	public Client(final long id, final boolean isMale, final String lastName, final List<String> names, final String emailAddress, final String physicalAddress, final Set<Account> accounts) {
+		final List<String> trimmedNames = new ArrayList<>();
+		final Set<Account> checkedAccounts;
+		if (isBlank(lastName) ||null == names || isBlank(emailAddress) || isBlank(physicalAddress) || null == accounts)
+			throw new IllegalArgumentException();
+		checkedAccounts = checkSetElements(accounts);
+		checkListElements(names).forEach(name -> {
+			final String trimmed = name.trim();
+			if (isNotBlank(trimmed))
+				trimmedNames.add(trimmed);
+		});
+		if (trimmedNames.isEmpty())
+			throw new IllegalArgumentException();
+		else if (checkedAccounts.isEmpty())
+			throw new IllegalArgumentException();
 		this.id = id;
-		this.lastName = lastName;
-		this.names = names;
+		this.lastName = lastName.trim();
+		this.names = trimmedNames;
 		this.isMale = isMale;
-		this.emailAddress = emailAddress;
-		this.physicalAddress = physicalAddress;
-		this.accounts = accounts;
+		this.emailAddress = emailAddress.trim();
+		this.physicalAddress = physicalAddress.trim();
+		this.accounts = checkedAccounts;
 		this.isActive = true;
 	}
 
@@ -55,7 +75,11 @@ public class Client {
 	}
 
 	public void setEmailAddress(final String emailAddress) {
-		this.emailAddress = emailAddress;
+		if (null == emailAddress)
+			return;
+		final String trimmed = emailAddress.trim();
+		if (isNotBlank(trimmed))
+			this.emailAddress = trimmed;
 	}
 
 	public String getPhysicalAddress() {
@@ -63,7 +87,11 @@ public class Client {
 	}
 
 	public void setPhysicalAddress(final String physicalAddress) {
-		this.physicalAddress = physicalAddress;
+		if (null == physicalAddress)
+			return;
+		final String trimmed = physicalAddress.trim();
+		if (isNotBlank(trimmed))
+			this.physicalAddress = trimmed;
 	}
 
 	public Set<Account> getAccounts() {
@@ -71,10 +99,17 @@ public class Client {
 	}
 
 	public void setAccounts(Set<Account> accounts) {
-		this.accounts = accounts;
+		if (null == accounts)
+			return;
+		final Set<Account> checkedAccounts = checkSetElements(accounts);
+
+		if (!checkedAccounts.isEmpty())
+			this.accounts = checkedAccounts;
 	}
 
 	public void addAccount(Account account) {
+		if (null == account)
+			return;
 		this.accounts.add(account);
 	}
 
