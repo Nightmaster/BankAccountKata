@@ -20,7 +20,10 @@ public class Account {
 		this.id = id;
 		this.accountType = accountType;
 		this.amount = amount;
-		this.overdraftAllowed = overdraftAllowed;
+		if (0 > overdraftAllowed)
+			this.overdraftAllowed = -overdraftAllowed;
+		else
+			this.overdraftAllowed = overdraftAllowed;
 		this.overdraft = false;
 		this.operations.add(new Operation(INITIALIZATION, BigDecimal.ZERO, amount));
 	}
