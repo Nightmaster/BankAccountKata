@@ -1,10 +1,10 @@
 package fr.sgcib.test;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.TreeMap;
 import fr.sgcib.test.constants.AccountType;
 
@@ -25,13 +25,17 @@ public class Bank {
 	}
 
 	public synchronized void createClient(final boolean isMale, final String familyName, final String[] names, final String emailAddress, final String physicalAddress, final BigDecimal amount, final long overdraftAllowed) {
-		final Set<Account> accounts = new HashSet<>(1);
+		final List<Account> accounts = new ArrayList<>(1);
 		final Client client;
 
 		accounts.add(createAccount(CHECKING_ACCOUNT, amount, overdraftAllowed));
 		client = new Client(clientCount, isMale, familyName, names, emailAddress, physicalAddress, accounts);
 		this.clients.put(clientCount, client);
 		clientCount++;
+	}
+
+	public void createAccountForClient(final Client client, final AccountType accountType, final BigDecimal amount, final long overdraftAllowed) {
+
 	}
 
 	private synchronized Account createAccount(final AccountType accountType, final BigDecimal amount, final long overdraftAllowed) {
