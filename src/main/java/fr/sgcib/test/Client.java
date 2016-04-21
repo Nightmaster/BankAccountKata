@@ -74,6 +74,10 @@ public class Client {
 		this.accounts = accounts;
 	}
 
+	public void addAccount(Account account) {
+		this.accounts.add(account);
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.id, this.lastName, this.names, this.isActive, this.emailAddress, this.physicalAddress);
