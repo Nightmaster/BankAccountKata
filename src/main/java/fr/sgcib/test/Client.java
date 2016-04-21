@@ -2,6 +2,7 @@ package fr.sgcib.test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -15,12 +16,12 @@ public class Client {
 	private final long id;
 	private final String lastName;
 	private final List<String> names;
+	private final Set<AccountType> accountTypes = new HashSet<>();
 	private boolean isMale,
 		isActive;
 	private String emailAddress;
 	private String physicalAddress;
 	private List<Account> accounts;
-	private Set<AccountType> accountTypes;
 
 	public Client(final long id, final boolean isMale, final String lastName, final List<String> names, final String emailAddress, final String physicalAddress, final List<Account> accounts) {
 		final List<String> trimmedNames = new ArrayList<>();
@@ -28,15 +29,18 @@ public class Client {
 		if (isBlank(lastName) ||null == names || isBlank(emailAddress) || isBlank(physicalAddress) || null == accounts)
 			throw new IllegalArgumentException();
 		checkedAccounts = checkListElements(accounts);
+		if (checkedAccounts.isEmpty())
+			throw new IllegalArgumentException("No correct account to add! Please check the data");
+		checkedAccounts.forEach(account -> this.accountTypes.add(account.getAccountType()));
 		checkListElements(names).forEach(name -> {
 			final String trimmed = name.trim();
 			if (isNotBlank(trimmed))
 				trimmedNames.add(trimmed);
 		});
 		if (trimmedNames.isEmpty())
-			throw new IllegalArgumentException();
-		else if (checkedAccounts.isEmpty())
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("No one of the names is valid! Please check data");
+		else if (checkedAccounts.isEmpty() || checkedAccounts.size() != this.accountTypes.size())
+			throw new IllegalArgumentException("Check the list of accounts to be sure they are not of the same type!");
 		this.id = id;
 		this.lastName = lastName.trim();
 		this.names = trimmedNames;
@@ -104,13 +108,30 @@ public class Client {
 			return;
 		final List<Account> checkedAccounts = checkListElements(accounts);
 
-		if (!checkedAccounts.isEmpty())
-			this.accounts = checkedAccounts;
+		if (!checkedAccounts.isEmpty()) {
+			this.accountTypes.clear();
+			for (final Account account : checkedAccounts) {
+				final int length = this.accountTypes.size();
+				this.accountTypes.add(account.getAccountType());
+				if (length != this.accountTypes.size())
+					addAccount(account, true);
+			}
+		}
 	}
 
 	public void addAccount(final Account account) {
-		if (null == account)
-			return;
+		addAccount(account, false);
+	}
+
+	private void addAccount(final Account account, final boolean checked) {
+		if (!checked) {
+			final int length = this.accountTypes.size();
+			if (null == account)
+				return;
+			this.accountTypes.add(account.getAccountType());
+			if (length == this.accountTypes.size())
+				return;
+		}
 		this.accounts.add(account);
 	}
 
