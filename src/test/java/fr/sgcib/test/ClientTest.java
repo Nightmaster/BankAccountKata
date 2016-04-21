@@ -37,6 +37,7 @@ public class ClientTest {
 	public void throwIAEOnIncorrectInitializationTest() {
 		final String testCase = "throwIAEOnIncorrectInitializationTest() - ";
 		final List<Throwable> throwables = new ArrayList<>();
+		final List<Account> twoSavingAccounts = new ArrayList<>();
 
 		tryCatchAndAdd(LF + SEPARATOR + testCase + "Try incorrect name", 0, false, null, NAMES, EMAIL_ADDRESS, PHYSICAL_ADDRESS, ACCOUNTS, throwables);
 
@@ -48,8 +49,12 @@ public class ClientTest {
 
 		tryCatchAndAdd(testCase + "Try incorrect accounts", 0, false, FAMILY_NAME, NAMES, EMAIL_ADDRESS, PHYSICAL_ADDRESS, null, throwables);
 
+		twoSavingAccounts.add(createAccount());
+		twoSavingAccounts.add(createAccount());
+		tryCatchAndAdd(testCase + "Try two accountsof same type", 0, false, FAMILY_NAME, NAMES, EMAIL_ADDRESS, PHYSICAL_ADDRESS, twoSavingAccounts, throwables);
+
 		System.out.println("Check list length");
-		assertTrue("There only " + throwables.size() + " that has been thrown, on 5 expected!", 5 == throwables.size());
+		assertTrue("There only " + throwables.size() + " that has been thrown, on 6 expected!", 6 == throwables.size());
 
 		System.out.println("Check exceptions are not null");
 		throwables.forEach(exc -> assertNotNull("Exception " + throwables.indexOf(exc) + " is null!", exc));
@@ -141,6 +146,8 @@ public class ClientTest {
 		client.setAccounts(accounts);
 		assertArrayEquals(ACCOUNTS_CHANGED, ACCOUNTS.toArray(), client.getAccounts().toArray());
 		client.addAccount(null);
+		assertArrayEquals(ACCOUNTS_CHANGED, ACCOUNTS.toArray(), client.getAccounts().toArray());
+		client.addAccount(createAccount());
 		assertArrayEquals(ACCOUNTS_CHANGED, ACCOUNTS.toArray(), client.getAccounts().toArray());
 		System.out.println(testCase + OK + LF + SEPARATOR);
 	}
