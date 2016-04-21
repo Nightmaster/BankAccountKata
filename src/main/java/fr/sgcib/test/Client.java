@@ -1,11 +1,9 @@
 package fr.sgcib.test;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class Client {
 	private final long id;
@@ -29,17 +27,7 @@ public class Client {
 	}
 
 	public Client(final long id, final boolean isMale, final String lastName, final String[] names, final String emailAddress, final String physicalAddress, final Set<Account> accounts) {
-		this.id = id;
-		this.isMale = isMale;
-		this.lastName = lastName;
-		this.emailAddress = emailAddress;
-		this.physicalAddress = physicalAddress;
-		this.names = new ArrayList<>(names.length);
-		for (final String name : names)
-			if (isNotBlank(name))
-				this.names.add(name);
-		this.accounts = accounts;
-		this.isActive = true;
+		this(id, isMale, lastName, Arrays.asList(names), emailAddress, physicalAddress, accounts);
 	}
 
 	public long getId() {
