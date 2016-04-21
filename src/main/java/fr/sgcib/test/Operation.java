@@ -38,4 +38,8 @@ public class Operation {
 	public BigDecimal getPreviousAmount() {
 		return this.previousAmount;
 	}
+
+	public BigDecimal getAmount() {
+		return this.newAmount.add(this.previousAmount.negate());
+	}
 }
