@@ -27,7 +27,7 @@ public class ClientTest {
 		ACCOUNTS_CHANGED = "Accounts are not the same after set or add";
 	private static final String[] NAMES = new String[] {"Alice", "Wonderland"};
 
-	private final static Set<Account> ACCOUNTS = new HashSet<>();
+	private final static List<Account> ACCOUNTS = new ArrayList<>();
 
 	static {
 		ACCOUNTS.add(createAccount());
@@ -71,7 +71,7 @@ public class ClientTest {
 	}
 
 	private static void tryCatchAndAdd(final String log, int id, boolean isMale, final String familyName, final String[] names, final String emailAddress, final String physicalAddress,
-			final Set<Account> accounts, final List<Throwable> throwables) {
+			final List<Account> accounts, final List<Throwable> throwables) {
 		System.out.println(log);
 		try {
 			new Client(id, isMale, familyName, names, emailAddress, physicalAddress, accounts);
@@ -115,7 +115,7 @@ public class ClientTest {
 	public void settersDoNotChangeDataOnNullOrBlankButChangeOnCorrectTest() {
 		final String testCase = "settersDoNotChangeDataOnNullOrBlankButChangeOnCorrectTest() - ";
 		final Client client = new Client(-10, false, FAMILY_NAME, NAMES, EMAIL_ADDRESS, PHYSICAL_ADDRESS, ACCOUNTS);
-		final Set<Account> accounts = new HashSet<>();
+		final List<Account> accounts = new ArrayList<>();
 
 		System.out.println(LF + SEPARATOR + testCase + "Check physical address setter set only on correct data");
 		client.setPhysicalAddress("  \t     ");

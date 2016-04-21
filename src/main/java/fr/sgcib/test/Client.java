@@ -5,11 +5,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import fr.sgcib.test.constants.AccountType;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static fr.sgcib.test.utils.Utilitarians.checkListElements;
-import static fr.sgcib.test.utils.Utilitarians.checkSetElements;
 
 public class Client {
 	private final long id;
@@ -19,14 +19,15 @@ public class Client {
 		isActive;
 	private String emailAddress;
 	private String physicalAddress;
-	private Set<Account> accounts;
+	private List<Account> accounts;
+	private Set<AccountType> accountTypes;
 
-	public Client(final long id, final boolean isMale, final String lastName, final List<String> names, final String emailAddress, final String physicalAddress, final Set<Account> accounts) {
+	public Client(final long id, final boolean isMale, final String lastName, final List<String> names, final String emailAddress, final String physicalAddress, final List<Account> accounts) {
 		final List<String> trimmedNames = new ArrayList<>();
-		final Set<Account> checkedAccounts;
+		final List<Account> checkedAccounts;
 		if (isBlank(lastName) ||null == names || isBlank(emailAddress) || isBlank(physicalAddress) || null == accounts)
 			throw new IllegalArgumentException();
-		checkedAccounts = checkSetElements(accounts);
+		checkedAccounts = checkListElements(accounts);
 		checkListElements(names).forEach(name -> {
 			final String trimmed = name.trim();
 			if (isNotBlank(trimmed))
@@ -46,7 +47,7 @@ public class Client {
 		this.isActive = true;
 	}
 
-	public Client(final long id, final boolean isMale, final String lastName, final String[] names, final String emailAddress, final String physicalAddress, final Set<Account> accounts) {
+	public Client(final long id, final boolean isMale, final String lastName, final String[] names, final String emailAddress, final String physicalAddress, final List<Account> accounts) {
 		this(id, isMale, lastName, Arrays.asList(names), emailAddress, physicalAddress, accounts);
 	}
 
@@ -94,20 +95,20 @@ public class Client {
 			this.physicalAddress = trimmed;
 	}
 
-	public Set<Account> getAccounts() {
+	public List<Account> getAccounts() {
 		return this.accounts;
 	}
 
-	public void setAccounts(Set<Account> accounts) {
+	public void setAccounts(final List<Account> accounts) {
 		if (null == accounts)
 			return;
-		final Set<Account> checkedAccounts = checkSetElements(accounts);
+		final List<Account> checkedAccounts = checkListElements(accounts);
 
 		if (!checkedAccounts.isEmpty())
 			this.accounts = checkedAccounts;
 	}
 
-	public void addAccount(Account account) {
+	public void addAccount(final Account account) {
 		if (null == account)
 			return;
 		this.accounts.add(account);
