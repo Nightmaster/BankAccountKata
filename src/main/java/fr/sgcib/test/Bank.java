@@ -17,7 +17,7 @@ public class Bank {
 	private final Map<Long, Client> clients;
 
 	private Bank() {
-		this.clients = new TreeMap<Long, Client>();
+		this.clients = new TreeMap<>();
 	}
 
 	public static Bank getInstance(){
@@ -30,6 +30,7 @@ public class Bank {
 
 		accounts.add(createAccount(CHECKING_ACCOUNT, amount, overdraftAllowed));
 		client = new Client(clientCount, isMale, familyName, names, emailAddress, physicalAddress, accounts);
+		this.clients.put(clientCount, client);
 		clientCount++;
 	}
 

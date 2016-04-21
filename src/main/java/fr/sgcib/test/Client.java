@@ -8,8 +8,8 @@ import java.util.Set;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
-import static fr.sgcib.test.utils.Uilitarians.checkListElements;
-import static fr.sgcib.test.utils.Uilitarians.checkSetElements;
+import static fr.sgcib.test.utils.Utilitarians.checkListElements;
+import static fr.sgcib.test.utils.Utilitarians.checkSetElements;
 
 public class Client {
 	private final long id;

@@ -5,8 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public final class Uilitarians {
-	private Uilitarians() {
+public final class Utilitarians {
+	private Utilitarians() {
 		throw new AssertionError("Utils class have not to be instantiated!");
 	}
 
