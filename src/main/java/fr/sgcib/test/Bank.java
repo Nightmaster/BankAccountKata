@@ -34,8 +34,8 @@ public class Bank {
 		clientCount++;
 	}
 
-	public void createAccountForClient(final Client client, final AccountType accountType, final BigDecimal amount, final long overdraftAllowed) {
-
+	public synchronized Account createAccountForClient(final Client client, final AccountType accountType, final BigDecimal amount, final long overdraftAllowed) {
+		return null;
 	}
 
 	private synchronized Account createAccount(final AccountType accountType, final BigDecimal amount, final long overdraftAllowed) {

@@ -28,17 +28,12 @@ public class IntegrationTest {
 	public void clientWantsToSaveMoneyUSTest() {
 		final int amount = 50000;
 		final BigDecimal realAmount;
-		final Client client = this.bank.getClients().get(25L);
+		final Account savingAccount;
 
-		this.bank.createAccountForClient(client, SAVING_ACCOUNT, new BigDecimal(0), 0);
-		final Account savingAccount = client.getAccountByType(SAVING_ACCOUNT);
-		savingAccount.addOrRemoveMoney(new BigDecimal(amount));
-
+		savingAccount = addMoneyOnNewSavingAccount(amount, this.bank.getClients().get(25L));
 		realAmount = savingAccount.getAmount();
 		assertTrue("Amount missmatch: expected " + amount + " but found: " + realAmount.toPlainString(), 0 == new BigDecimal(amount).compareTo(realAmount));
 	}
-
-
 
 	@Test
 	public void clientWantsToRetrieveMoneyUSTest() {
@@ -48,6 +43,15 @@ public class IntegrationTest {
 	@Test
 	public void clientWantsToCheckOperationsUSTest() {
 
+	}
+
+	private Account addMoneyOnNewSavingAccount(final int amount, final Client client) {
+		final Account savingAccount;
+
+		savingAccount = this.bank.createAccountForClient(client, SAVING_ACCOUNT, new BigDecimal(0), 0);
+		savingAccount.addOrRemoveMoney(new BigDecimal(amount));
+
+		return savingAccount;
 	}
 
 	private static String randomString() {
