@@ -9,13 +9,12 @@ import fr.sgcib.test.constants.OperationType;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static fr.sgcib.test.constants.LogHelper.LF;
+import static fr.sgcib.test.constants.LogHelper.OK;
+import static fr.sgcib.test.constants.LogHelper.SEPARATOR;
 import static fr.sgcib.test.constants.OperationType.INITIALIZATION;
 
 public class OperationTest {
-	private static final char LF = '\n';
-	private static final String OK = "Test is OK!",
-	SEPARATOR = "------" + LF;
-
 	@Test
 	public void throwIAEOnIncorrectInitialization() {
 		final String testCase = "throwIAEOnIncorrectInitialization() - ";
