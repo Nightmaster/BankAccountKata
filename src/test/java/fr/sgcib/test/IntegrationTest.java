@@ -43,7 +43,31 @@ public class IntegrationTest {
 
 	@Test
 	public void clientWantsToRetrieveMoneyUSTest() {
+		final String testCase = "clientWantsToRetrieveMoneyUSTest() - ";
+		final int initialAmount = 100000,
+			retrievedAmount = 25000;
+		final Client client;
+		final Account savingAccount;
+		int expectedNewAmount;
+		BigDecimal realAmount;
 
+		System.out.println(LF + SEPARATOR + testCase + "Check we can create a new account and add money on it");
+		client = this.bank.getClients().get(8L);
+		savingAccount = addMoneyOnNewSavingAccount(initialAmount, client);
+		realAmount = savingAccount.getAmount();
+		assertTrue(testCase + "Amount mismatch: expected " + initialAmount + " but found: " + realAmount.toPlainString(), 0 == new BigDecimal(initialAmount).compareTo(realAmount));
+
+		System.out.println(testCase + "Check we retrieve money from the created account");
+		savingAccount.addOrRemoveMoney(new BigDecimal(-retrievedAmount));
+		realAmount = savingAccount.getAmount();
+		expectedNewAmount = initialAmount - retrievedAmount;
+		assertTrue(testCase + "Amount mismatch: expected " + expectedNewAmount + " but found: " + realAmount.toPlainString(), 0 == new BigDecimal(expectedNewAmount).compareTo(realAmount));
+
+		System.out.println(testCase + "Check we retrieve all the money from the created account");
+		savingAccount.addOrRemoveMoney(realAmount.negate());
+		realAmount = savingAccount.getAmount();
+		assertTrue(testCase + "Amount mismatch: expected " + 0 + " but found: " + realAmount.toPlainString(), 0 == BigDecimal.ZERO.compareTo(realAmount));
+		System.out.println(testCase + OK + LF + SEPARATOR);
 	}
 
 	@Test
