@@ -1,6 +1,7 @@
 package fr.sgcib.test;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 public class Bank {
@@ -19,5 +20,10 @@ public class Bank {
 
 	public Map<Long, Client> getClients() {
 		return this.clients;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.clients);
 	}
 }
