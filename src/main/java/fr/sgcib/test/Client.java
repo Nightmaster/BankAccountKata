@@ -103,6 +103,13 @@ public class Client {
 		return this.accounts;
 	}
 
+	public Account getAccountByType(final AccountType accountType) {
+		for (final Account account : this.accounts)
+			if (accountType.equals(account.getAccountType()))
+				return account;
+		return null;
+	}
+
 	public void setAccounts(final List<Account> accounts) {
 		if (null == accounts)
 			return;
