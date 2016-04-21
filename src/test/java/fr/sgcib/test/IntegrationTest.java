@@ -37,7 +37,14 @@ public class IntegrationTest {
 	}
 
 	private static boolean isBetweenDateAndHour(final LocalDateTime dateToCompare, final LocalDateTime startDate, final LocalDateTime endDate) {
-		return startDate.isBefore(dateToCompare) && endDate.isAfter(dateToCompare);
+		final boolean beforeStartDate =  startDate.isBefore(dateToCompare),
+			equalsStartDate = startDate.isEqual(dateToCompare),
+			afterEndDate = endDate.isAfter(dateToCompare),
+			equalsEndDate = endDate.isEqual(dateToCompare);
+		return beforeStartDate && afterEndDate
+			|| (equalsStartDate && afterEndDate)
+			|| (beforeStartDate && equalsEndDate)
+			|| (equalsStartDate && equalsEndDate);
 	}
 
 	/**
@@ -48,6 +55,7 @@ public class IntegrationTest {
 		this.creationDate = LocalDateTime.now();
 		int x = 50,
 			random = x + ((int) (SECURE_RANDOM.nextDouble() * x)); // Random is in [50; 100] interval
+		this.bank.clearClients();
 		for (int i = 0; i < random; i++)
 			this.bank.createClient(true, randomString(), new String[] {randomString()}, randomString() + "@" + randomString() + ".fr", randomString() + ' ' + randomString() + ' ' + randomString(), new BigDecimal(1500L), 500L);
 	}
@@ -98,12 +106,12 @@ public class IntegrationTest {
 	@Test
 	public void clientWantsToCheckOperationsUSTest() {
 		final String testCase = "clientWantsToCheckOperationsUSTest() - ";
-		final int[] amountsByStep = {0,  1500, 0,100000, -150, -15000, 15000, -15000},
-			balanceByStep = {0, 1500, 0, 100000, 1350, 85000, 16350, 1350};
+		final int[] amountsByStep = {1500, 0, 100000, -150, -15000, 15000, -15000},
+			balanceByStep = {1500, 0, 100000, 1350, 85000, 16350, 1350};
 		final Client client;
 		final Account checkingAccount,
 			homePurchaseSavingsAccount;
-		final List<Operation> allOperations = new ArrayList<>();;
+		final List<Operation> allOperations = new ArrayList<>();
 		final List<LocalDateTime> dates = new ArrayList<>();
 		BigDecimal realAmount,
 			balance;
@@ -113,8 +121,22 @@ public class IntegrationTest {
 		client = this.bank.getClients().get(25L);
 		checkingAccount = client.getAccountByType(CHECKING_ACCOUNT);
 		assertNotNull("Checking account might have been created, but is not!", checkingAccount);
+
+		dates.add(LocalDateTime.now());
 		homePurchaseSavingsAccount = this.bank.createAccountForClient(client, HOME_PURCHASE_SAVINGS_ACCOUNT, new BigDecimal(0), 0);
-		homePurchaseSavingsAccount.addOrRemoveMoney(new BigDecimal(amountsByStep[0]));
+		assertNotNull("home purchase savings account might have been created, but is not!", homePurchaseSavingsAccount);
+		dates.add(LocalDateTime.now());
+
+		for (int i = 2; i < amountsByStep.length; i++) {
+			final long expectedtime = System.currentTimeMillis() + 10;
+			while (System.currentTimeMillis() < expectedtime) {} //Force Thread to run but not to block the LocalDateTime inner time
+			dates.add(LocalDateTime.now());
+			if (0 != i % 2 || 6 == i)
+				checkingAccount.addOrRemoveMoney(new BigDecimal(amountsByStep[i]));
+			else
+				homePurchaseSavingsAccount.addOrRemoveMoney(new BigDecimal(amountsByStep[i]));
+			dates.add(LocalDateTime.now());
+		}
 
 		System.out.println(testCase + "Retrieving the operations for the two counts");
 		allOperations.addAll(checkingAccount.getOperations());
@@ -137,18 +159,18 @@ public class IntegrationTest {
 				endDateToCheck = dates.get(i * 2);
 			}
 			currentDate = currentOperation.getDate();
-			System.out.println(testCase + "Checking operation n" + i);
+			System.out.println(testCase + "Checking operation n°" + i);
 			assertTrue(
 				"Date  is not in expected date range: date=" + currentDate.format(ISO_LOCAL_DATE_TIME) + ", dateRange=[" + startDateToCheck.format(ISO_LOCAL_DATE_TIME) + ", " +
-				endDateToCheck.format(ISO_LOCAL_DATE_TIME) + "] for operation n" + i,
+				endDateToCheck.format(ISO_LOCAL_DATE_TIME) + "] for operation n°" + i,
 				isBetweenDateAndHour(currentDate, startDateToCheck, endDateToCheck));
 
 			realAmount = currentOperation.getAmount();
 			assertTrue(
-				"Expected amounts are not the same: expected: " + amountsByStep[i] + " but found: " + realAmount.toPlainString() + " for operation n" + i,
+				"Expected amounts are not the same: expected: " + amountsByStep[i] + " but found: " + realAmount.toPlainString() + " for operation n°" + i,
 				0 == new BigDecimal(amountsByStep[i]).compareTo(realAmount));
 
-			if (0 == i || 3 == i)
+			if (2 > i)
 				expectedOperationType = INITIALIZATION;
 			else
 				expectedOperationType = isNegative(realAmount) ? WITHDRAWAL : CREDIT;
@@ -157,9 +179,9 @@ public class IntegrationTest {
 
 			balance = currentOperation.getNewAmount();
 			assertTrue(
-				"Expected balance are not the same: expected: " + balanceByStep[i] + " but found: " + balance.toPlainString() + " for operation n" + i,
+				"Expected balance are not the same: expected: " + balanceByStep[i] + " but found: " + balance.toPlainString() + " for operation n°" + i,
 				0 == new BigDecimal(balanceByStep[i]).compareTo(balance));
-			System.out.println(testCase + "Operation n" + i + "is OK");
+			System.out.println(testCase + "Operation n°" + i + " is OK");
 		}
 		System.out.println(testCase + OK + LF + SEPARATOR);
 	}
