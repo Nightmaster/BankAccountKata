@@ -24,6 +24,7 @@ import static fr.sgcib.test.constants.LogHelper.SEPARATOR;
 import static fr.sgcib.test.constants.OperationType.DEBIT;
 import static fr.sgcib.test.constants.OperationType.INITIALIZATION;
 import static fr.sgcib.test.constants.OperationType.WITHDRAWAL;
+import static fr.sgcib.test.utils.Utilitarians.isNegative;
 
 public class IntegrationTest {
 	private final Bank bank = Bank.getInstance();
@@ -150,7 +151,7 @@ public class IntegrationTest {
 			if (0 == i || 3 == i)
 				expectedOperationType = INITIALIZATION;
 			else
-				expectedOperationType = 0 > BigDecimal.ZERO.compareTo(realAmount) ? WITHDRAWAL : DEBIT;
+				expectedOperationType = isNegative(realAmount) ? WITHDRAWAL : DEBIT;
 			assertEquals("Operation type mismatch!", expectedOperationType, currentOperation.getOperationType());
 
 

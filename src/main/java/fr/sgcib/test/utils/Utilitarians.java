@@ -1,5 +1,6 @@
 package fr.sgcib.test.utils;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -26,5 +27,9 @@ public final class Utilitarians {
 				listChecked.add(element);
 		});
 		return listChecked;
+	}
+
+	public static boolean isNegative(final BigDecimal bigDecimal) {
+		return -1 == bigDecimal.signum();
 	}
 }
