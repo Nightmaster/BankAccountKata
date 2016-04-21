@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import fr.sgcib.test.constants.OperationType;
 
+import static fr.sgcib.test.constants.OperationType.INITIALIZATION;
+
 public class Operation {
 	private final OperationType operationType;
 	private final LocalDate date;
@@ -14,7 +16,7 @@ public class Operation {
 	public Operation(final OperationType operationType, final BigDecimal previousAmount, final BigDecimal newAmount) {
 		if (null == operationType || null == newAmount || null == previousAmount)
 			throw new IllegalArgumentException("Error, at least one argument is empty or null. Please check data!");
-		else if (0 == newAmount.compareTo(previousAmount))
+		else if (!INITIALIZATION.equals(operationType) && 0 == newAmount.compareTo(previousAmount))
 			throw new IllegalArgumentException("Error, the two amounts are the same, this is not allowed!");
 		this.operationType = operationType;
 		this.previousAmount = previousAmount;
