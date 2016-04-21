@@ -61,4 +61,13 @@ public class Bank {
 	public int hashCode() {
 		return Objects.hash(this.clients);
 	}
+
+	/**
+	* Clear the list of clients ==> usage allowed only for tests !
+	**/
+	void clearClients() {
+		this.clients.clear();
+		accountCount = 0;
+		clientCount = 0;
+	}
 }
