@@ -15,6 +15,7 @@ import static fr.sgcib.test.constants.AccountType.SAVING_ACCOUNT;
 import static fr.sgcib.test.constants.LogHelper.LF;
 import static fr.sgcib.test.constants.LogHelper.OK;
 import static fr.sgcib.test.constants.LogHelper.SEPARATOR;
+import static fr.sgcib.test.utils.TestUtils.addAndCheck;
 
 public class AccountTest {
 	@Test
@@ -85,10 +86,5 @@ public class AccountTest {
 		}
 		assertNull(testCase + "An exception has been thrown on Account correct construction!", throwable);
 		System.out.println(testCase + OK + LF + SEPARATOR);
-	}
-
-	private static void addAndCheck(final List<Throwable> throwables, final Throwable th) {
-		assertNotNull(th);
-		throwables.add(th);
 	}
 }

@@ -13,12 +13,13 @@ import static fr.sgcib.test.constants.LogHelper.LF;
 import static fr.sgcib.test.constants.LogHelper.OK;
 import static fr.sgcib.test.constants.LogHelper.SEPARATOR;
 import static fr.sgcib.test.constants.OperationType.INITIALIZATION;
+import static fr.sgcib.test.utils.TestUtils.addAndCheck;
 
 public class OperationTest {
 	@Test
 	public void throwIAEOnIncorrectInitialization() {
 		final String testCase = "throwIAEOnIncorrectInitialization() - ";
-		final List<Exception> exceptions = new ArrayList<>();
+		final List<Throwable> exceptions = new ArrayList<>();
 		final OperationType operationType= INITIALIZATION;
 		final BigDecimal zero = BigDecimal.ZERO,
 			one = BigDecimal.ONE;
@@ -27,7 +28,7 @@ public class OperationTest {
 		try {
 			new Operation(null, zero, one);
 		}
-		catch (final Exception iae) {
+		catch (final Throwable iae) {
 			addAndCheck(exceptions, iae);
 		}
 
@@ -35,7 +36,7 @@ public class OperationTest {
 		try {
 			new Operation(operationType, null, one);
 		}
-		catch (final Exception iae) {
+		catch (final Throwable iae) {
 			addAndCheck(exceptions, iae);
 		}
 
@@ -43,7 +44,7 @@ public class OperationTest {
 		try {
 			new Operation(operationType, zero, null);
 		}
-		catch (final Exception iae) {
+		catch (final Throwable iae) {
 			addAndCheck(exceptions, iae);
 		}
 
@@ -51,7 +52,7 @@ public class OperationTest {
 		try {
 			new Operation(null, null, null);
 		}
-		catch (final Exception iae) {
+		catch (final Throwable iae) {
 			addAndCheck(exceptions, iae);
 		}
 
@@ -80,10 +81,5 @@ public class OperationTest {
 		}
 		assertNull(testCase + "An exception has been thrown on Operation correct construction!", exception);
 		System.out.println(testCase + OK + LF + SEPARATOR);
-	}
-
-	private static void addAndCheck(List<Exception> exceptions, Exception iae) {
-		assertNotNull(iae);
-		exceptions.add(iae);
 	}
 }
