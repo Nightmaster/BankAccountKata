@@ -21,7 +21,7 @@ import static fr.sgcib.test.constants.AccountType.SAVING_ACCOUNT;
 import static fr.sgcib.test.constants.LogHelper.LF;
 import static fr.sgcib.test.constants.LogHelper.OK;
 import static fr.sgcib.test.constants.LogHelper.SEPARATOR;
-import static fr.sgcib.test.constants.OperationType.DEBIT;
+import static fr.sgcib.test.constants.OperationType.CREDIT;
 import static fr.sgcib.test.constants.OperationType.INITIALIZATION;
 import static fr.sgcib.test.constants.OperationType.WITHDRAWAL;
 import static fr.sgcib.test.utils.Utilitarians.isNegative;
@@ -151,7 +151,7 @@ public class IntegrationTest {
 			if (0 == i || 3 == i)
 				expectedOperationType = INITIALIZATION;
 			else
-				expectedOperationType = isNegative(realAmount) ? WITHDRAWAL : DEBIT;
+				expectedOperationType = isNegative(realAmount) ? WITHDRAWAL : CREDIT;
 			assertEquals("Operation type mismatch!", expectedOperationType, currentOperation.getOperationType());
 
 

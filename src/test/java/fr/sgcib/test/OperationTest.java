@@ -12,7 +12,7 @@ import static org.junit.Assert.assertTrue;
 import static fr.sgcib.test.constants.LogHelper.LF;
 import static fr.sgcib.test.constants.LogHelper.OK;
 import static fr.sgcib.test.constants.LogHelper.SEPARATOR;
-import static fr.sgcib.test.constants.OperationType.DEBIT;
+import static fr.sgcib.test.constants.OperationType.CREDIT;
 import static fr.sgcib.test.constants.OperationType.INITIALIZATION;
 import static fr.sgcib.test.utils.TestUtils.addAndCheck;
 
@@ -21,7 +21,7 @@ public class OperationTest {
 	public void throwIAEOnIncorrectInitialization() {
 		final String testCase = "throwIAEOnIncorrectInitialization() - ";
 		final List<Throwable> exceptions = new ArrayList<>();
-		final OperationType operationType = DEBIT;
+		final OperationType operationType = CREDIT;
 		final BigDecimal zero = BigDecimal.ZERO,
 			one = BigDecimal.ONE;
 
@@ -83,7 +83,7 @@ public class OperationTest {
 		assertNull(testCase + "An exception has been thrown on Operation correct construction!", exception);
 
 		try {
-			new Operation(DEBIT, BigDecimal.ZERO, BigDecimal.ONE);
+			new Operation(CREDIT, BigDecimal.ZERO, BigDecimal.ONE);
 		}
 		catch (final Exception exc) {
 			exception = exc;
