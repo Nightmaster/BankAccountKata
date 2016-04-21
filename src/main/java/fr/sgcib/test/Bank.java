@@ -35,7 +35,13 @@ public class Bank {
 	}
 
 	public synchronized Account createAccountForClient(final Client client, final AccountType accountType, final BigDecimal amount, final long overdraftAllowed) {
-		return null;
+		final Account accountToCreate;
+
+		accountToCreate = new Account(accountCount, accountType, amount, overdraftAllowed);
+		accountCount++;
+		client.addAccount(accountToCreate);
+
+		return accountToCreate;
 	}
 
 	private synchronized Account createAccount(final AccountType accountType, final BigDecimal amount, final long overdraftAllowed) {
